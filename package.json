@@ -1,0 +1,21 @@
+{
+  "name": "insurgency",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "flat-db": "^3.0.0",
+    "frontail": "^4.5.3",
+    "gamedig": "^2.0.12",
+    "keypress": "^0.2.1",
+    "rcon": "^1.0.3",
+    "safe-log-reader": "^1.0.8",
+    "tail": "^2.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
