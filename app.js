@@ -1,3 +1,4 @@
+//define why this app exists
 const Rcon = require('./node_modules/rcon/node-rcon');
 const PlayerParse = require('./parser');
 
