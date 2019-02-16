@@ -12,6 +12,8 @@ class Logger extends EventEmitter {
     }
 }
 
+
+
 module.exports = Logger;
 //module.exports.endpoint = url;
 
