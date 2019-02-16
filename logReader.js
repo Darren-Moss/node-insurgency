@@ -1,67 +1,66 @@
-const FlatDB = require('flat-db');
+var debug = false;
 
-// configure path to storage dir
-FlatDB.configure({
-  dir: './insurgency'
-});
-// since now, everything will be saved under ./storage
+////////////////////////////////
+////////////////////////////////
+//  Read Log File
+////////////////////////////////
+////////////////////////////////
+function readLog(logger,session) {
+  Tail = require('tail').Tail;
+var fileToTail = config.logfile;
 
-// create Movie collection with schema
-let PlayerMaster = new FlatDB.Collection('playermaster', {
-  steamid: '',
-  name: '',
-  rank: 0,
-  points: 0,
-  lastseen: 0,
-  haslevel1wins: 0,
-  haslevel1points: 0,
-  haslevel2wins: 0,
-  haslevel2points: 0,
-  haslevel2mvp: 0
-});
+var options = { separator: /[\r]{0,1}\n/, fromBeginning: true, fsWatchOptions: {}, follow: true, logger: console };
+tail = new Tail(fileToTail, options);
 
-var fs = require('fs'),
-  bite_size = 256,
-  readbytes = 0,
-  file = 0;
+tail.on("line", function (data) {
+  lastsession = session;
 
-fs.open('\\\\192.168.1.228\\steam\\Insurgency_Sandstorm_Hard\\Insurgency\\Saved\\Logs\\Insurgency.log', 'r', function (err, fd) { file = fd; readsome(); });
-
-function readsome() {
-  var stats = fs.fstatSync(file); // yes sometimes async does not make sense!
-  if (stats.size < readbytes + 1) {
-    //console.log('Hehe I am much faster than your writer..! I will sleep for a while, I deserve it!');
-    setTimeout(readsome, 3000);
+  if (data.includes('LogStatistics: Display: Config: UId: NULL 	Secret: NULL 	Endpoint:')) {
+    if ((session.server == null || session.server == '')) {
+      if (debug) {
+        console.log(`==========server line`, data);
+      }
+      logger.emit('serverInfo', data);
+    }
   }
-  else {
-    fs.read(file, new Buffer(bite_size), 0, bite_size, readbytes, processsome);
+  if (data.includes('LogGameMode: ProcessServerTravel:') || data.includes('LogScenario: Display: Successfully loaded scenario')) {
+    logger.emit('mapChanged', data);
   }
+
+  if (data.includes('LogEasyAntiCheatServer: [UnregisterClient] Client:')) {
+    logger.emit('playerDisconnected', data);
+  }
+
+  if (data.includes('LogOnline: Warning: STEAM (NWI): Player UNKNOWN')) {
+    //logger.emit('playerDropped',data);
+  }
+
+  if (data.includes('LogEasyAntiCheatServer: [RegisterClient] Client:')) {
+    logger.emit('playerConnected', data);
+  }
+
+  if (data.includes('LogGameMode: Display: Round Over:')) {
+    logger.emit('roundEnd', data);
+  }
+  if (data.includes('LogGameMode: Display: State: PreRound -> RoundActive')) {
+    logger.emit('roundStart', data);
+
+  }
+  if (data.includes('LogStatistics: Display: Game Statistics Debug: Game End ')) {
+    logger.emit('gameOver', data);
+  }
+});//end line read of log file
+
+tail.on("error", function (error) {
+  console.log('ERROR: Reading Log File ', error);
+});//end error on log file read
+
+
+////////////////////////////////
+////////////////////////////////
+//  Read Log File
+////////////////////////////////
+////////////////////////////////
 }
 
-var logline = '';
-function processsome(err, bytecount, buff) {
-  //console.log('Read', bytecount, 'and will process it now.');
-
-  // Here we will process our incoming data:
-  // Do whatever you need. Just be careful about not using beyond the bytecount in buff.
-
-  //  console.log(buff.toString('utf-8', 0, bytecount));
-
-  logline = buff.toString('utf-8', 0, bytecount);
-
-  //log entries
-
-  //player connect disconnect
-  //LogEasyAntiCheatServer: [RegisterClient] Client:
-  //LogEasyAntiCheatServer: [UnregisterClient] Client:
-  // if (logline.includes('Daz')){
-  //     console.log(`============== player connected ==========`);
-  //     console.log(logline);
-  // }
-  console.log(logline);
-  //round finish
-
-  // So we continue reading from where we left:
-  readbytes += bytecount;
-  process.nextTick(readsome);
-}
+module.exports = readLog;
