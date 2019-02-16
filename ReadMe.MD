@@ -1,6 +1,6 @@
 Author: Darren Moss
 Feb 2019
-=--------------------------------------------------------------------
+--------------------------------------------------------------------
 The main purpose of this is not to merely host an Insurgency Sandstorm server, but to create a gaming environment for your community.
 
 Two environment types or game modes available: Challenge and Progression
