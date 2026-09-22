@@ -1,15 +1,9 @@
 //define why this app exists
-const Rcon = require('./node_modules/rcon/node-rcon');
+const Rcon = require('rcon');
 const PlayerParse = require('./parser');
+const config = require('./config');
 
-const host = 'RCON_HOST'
-//const host = '127.0.0.1'
-const pass = 'CHANGEME'
-const hard = 27015;
-const medium = 27013;
-const easy = 27011;
-
-const rcon = new Rcon(host, 27011, pass);
+const rcon = new Rcon(config.host, config.qryPort, config.pass);
 const playerparser = new PlayerParse('', '', '', '');
 
 playerparser.on('parsedPlayer', (name, ip, steamid, score) => {

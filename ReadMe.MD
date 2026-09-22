@@ -119,3 +119,28 @@ Config:
     
 
 # node-insurgency
+
+--------------------------------------------------------------
+## Setup
+
+Requires Node.js.
+
+    git clone https://github.com/Darren-Moss/node-insurgency.git
+    cd node-insurgency
+    npm install
+    cp .env.example .env      # then edit .env with your own values
+    npm start
+
+## Configuration
+
+All settings live in `.env` (see `.env.example`). Nothing is hard-coded.
+
+| Variable | Purpose |
+| --- | --- |
+| `RCON_HOST` | Address of the Insurgency: Sandstorm server |
+| `RCON_PASS` | RCON password |
+| `SERVER` | Which server to attach to: `easy`, `medium`, `hard` or `dev` |
+| `PORT_EASY` / `PORT_MEDIUM` / `PORT_HARD` | Query ports (default 27011 / 27013 / 27015) |
+| `LOG_EASY` / `LOG_MEDIUM` / `LOG_HARD` / `LOG_DEV` | Path to each server's `Insurgency.log` |
+
+`.env` is gitignored. Never commit credentials.

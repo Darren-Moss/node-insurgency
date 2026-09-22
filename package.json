@@ -1,9 +1,10 @@
 {
-  "name": "insurgency",
+  "name": "node-insurgency",
   "version": "1.0.0",
-  "description": "",
+  "description": "Community server platform for Insurgency: Sandstorm - Challenge and Progression game modes driven by RCON and live log parsing.",
   "main": "app.js",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "flat-db": "^3.0.0",
     "frontail": "^4.5.3",
     "gamedig": "^2.0.12",
@@ -14,8 +15,19 @@
   },
   "devDependencies": {},
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Darren-Moss/node-insurgency.git"
+  },
+  "keywords": [
+    "insurgency-sandstorm",
+    "rcon",
+    "game-server",
+    "server-admin"
+  ],
+  "author": "Darren Moss",
   "license": "MIT"
 }
